@@ -1,0 +1,35 @@
+Field Name,Start Position,End Position,Field Length,Field Value
+Deal Code,1,6,6
+Deal Number,7,12,6
+Account Number  01,13,24,12
+Amount ,25,37,13
+Credit or Debit 01,38,38,1
+Value Date,39,46,8
+Narrative Line 1 -01,47,70,24
+Narrative Line 2 -01,71,94,24
+Narrative Line 3 -01,95,118,24
+Narrative Line 4 - 01,119,142,24
+Account Number 02,143,154,12
+Amount ,155,167,13
+Credit or Debit 02,168,168,1
+Narrative Line 1 - 02,169,192,24
+Narrative Line 2 - 02,193,216,24
+Narrative Line 3 - 02,217,240,24
+Narrative Line 4 - 02,241,264,24
+Account Number (IE),265,276,12
+IE Item,277,279,3
+IE/Product Type,280,282,3
+Cost Center,283,290,8
+Amount (IE),291,303,13
+Credit or Debit,304,304,1
+Narrative Line 1 - IE,305,328,24
+Narrative Line 2 - IE,329,352,24
+Narrative Line 3 - IE,353,376,24
+Narrative Line 4 - IE,377,400,24
+Account Number -03,401,412,12
+Amount - 03,413,425,13
+Credit or Debit,426,426,1
+Narrative Line 1 - 03,427,450,24
+Narrative Line 2 - 03,451,474,24
+Narrative Line 3 - 03,475,498,24
+Narrative Line 4 - 03,499,522,24

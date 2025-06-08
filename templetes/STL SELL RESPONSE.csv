@@ -1,0 +1,6 @@
+Field Name,Start Position,End Position,Field Length,Field Value
+Status,1,1,1
+Deal Number,2,7,6
+Account Balance,8,20,13
+Account Balance sign,21,21,1
+Error Message,22,333,312
