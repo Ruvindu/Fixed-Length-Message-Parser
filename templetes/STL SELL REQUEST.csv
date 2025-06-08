@@ -1,0 +1,62 @@
+Field Name,Start Position,End Position,Field Length,Field Value
+Deal Code,1,6,6
+Deal Number,7,12,6
+Account Number (Cust AC - CR),13,24,12
+Date,25,32,8
+Narrative Line 1 - Cust Ac,33,56,24
+Narrative Line 2 - Cust Ac,57,80,24
+Narrative Line 3 - Cust Ac,81,104,24
+Narrative Line 4 - Cust Ac,105,128,24
+Amount - Cust - CR,129,141,13
+Account Number (IE ) - Commission Ac,142,153,12
+Amount (IE  - CR),154,166,13
+IE Item,167,169,3
+IE/Product Type,170,172,3
+Cost Center,173,180,8
+Narrative Line 1 - IE,181,204,24
+Narrative Line 2 - IE,205,228,24
+Narrative Line 3 - IE,229,252,24
+Narrative Line 4 - IE,253,276,24
+Account Number (Susp - Clg) - GL Ac,277,288,12
+Amount (Susp - Clg  - DR),289,301,13
+Narrative Line 1 - Susp Clg,302,325,24
+Narrative Line 2 - Susp Clg,326,349,24
+Narrative Line 3 - Susp Clg,350,373,24
+Narrative Line 4 - Susp Clg,374,397,24
+Security Code,398,417,20
+Security Name,418,437,20
+Quantity,438,452,15
+Security Price,453,461,9
+Account Number - IE2 Commission Ac 2,462,473,12
+Amount - IE 2 CR,474,486,13
+IE Item - IE 2,487,489,3
+IE/Product Type - IE2,490,492,3
+Cost Center-IE2,493,500,8
+Narrative Line 1 - IE 2,501,524,24
+Narrative Line 2 - IE 2,525,548,24
+Narrative Line 3 - IE 2,549,572,24
+Narrative Line 4 - IE 2,573,596,24
+Account Number (Susp - SSRC) - GL Ac,597,608,12
+Amount (Susp _SSRC  - CR),609,621,13
+Narrative Line 1 - Susp SSRC,622,645,24
+Narrative Line 2 - Susp SSRC,646,669,24
+Narrative Line 3 - Susp SSRC,670,693,24
+Narrative Line 4 - susp SSRC,694,717,24
+Account Number - Susp Output VAT - GL Ac,718,729,12
+Amount - Susp Output VAT - CR,730,742,13
+Narrative Line 1 - Susp Output VAT,743,766,24
+Narrative Line 2 -Susp Output VAT,767,790,24
+Narrative Line 3 -Susp Output VAT,791,814,24
+Narrative Line 4 - Susp Output VAT,815,838,24
+Account Number - Susp SSRC VAT GL AC,839,850,12
+Amount - Susp SSRC VAT  - CR,851,863,13
+Narrative Line 1 - Susp SSRC VAT,864,887,24
+Narrative Line 2 -Susp SSRC VAT,888,911,24
+Narrative Line 3 -Susp SSRC VAT,912,935,24
+Narrative Line 4 - Susp SSRC VAT,936,959,24
+Account Number - Susp Input VAT on SSRC GL AC,960,971,12
+Amount - Susp Input VAT on SSRC - DR,972,984,13
+Narrative Line 1 - Susp Input VAT on SSRC,985,1008,24
+Narrative Line 2 - Susp Input VAT on SSRC,1009,1032,24
+Narrative Line 3 - Susp Input VAT on SSRC,1033,1056,24
+Narrative Line 4 - Susp Input VAT on SSRC,1057,1080,24

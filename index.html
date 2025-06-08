@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSV Viewer with Recent Files</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .btn {
+            width: 160px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-3">
+        <h2 class="text-center mb-4">Fixed-Length Message Parser</h2>
+
+        <!-- File input -->
+        <div class="mb-3">
+            <label for="csvFile" class="form-label">Select a Fixed-Length Message template :</label>
+            <input type="file" class="form-control" id="csvFile" accept=".csv" />
+        </div>
+
+        <!-- Recent files list -->
+        <div class="mb-4">
+            <h6>Recently Used Templates :</h6>
+            <div id="recentTemplates" class="d-flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Current file name display -->
+        <div class="mb-4">
+            <strong>Current Template :</strong> <span id="currentFileName">No Template Selected</span>
+        </div>
+
+
+        <!-- Fixed-length message parser -->
+        <div class="mb-3">
+            <label for="inputMessage" class="form-label">Enter Fixed-Length Message:</label>
+            <textarea class="form-control" id="inputMessage" placeholder="Paste your fixed-length message here..."
+                rows="7"></textarea>
+        </div>
+        <div>
+            <button class="btn btn-danger mb-4 mr-2" onclick="parseMessage()">Parse Message</button>
+            <button class="btn btn-secondary mb-4" onclick="clearMessage()">Clear</button>
+        </div>
+
+        <div id="parsedOutput"></div>
+
+        <!-- Table to display CSV content -->
+        <div class="table-responsive mb-5">
+            <table class="table table-bordered table-striped" id="csvTable">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+        const recentTemplatesContainer = document.getElementById("recentTemplates");
+        const fileInput = document.getElementById("csvFile");
+        const tableHead = document.querySelector("#csvTable thead");
+        const tableBody = document.querySelector("#csvTable tbody");
+        const currentFileNameSpan = document.getElementById("currentFileName");
+        const parsedOutput = document.getElementById("parsedOutput");
+
+        const recentTemplates = new Map();
+        var headers = [];
+        var fieldSchema = [];
+
+        fileInput.addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const content = e.target.result;
+                const displayName = stripCsvExtension(file.name);
+
+                addToRecent(file.name, content, displayName);
+                updateCurrentFileName(displayName);
+                fieldSchema = parseFieldSchemaFromCSV(content);
+                console.log(fieldSchema);
+            };
+            reader.readAsText(file);
+        });
+
+        function stripCsvExtension(filename) {
+            return filename.replace(/\.csv$/i, "");
+        }
+
+
+        function updateCurrentFileName(displayName) {
+            currentFileNameSpan.textContent = displayName;
+        }
+
+        function addToRecent(filename, content, displayName) {
+            if (recentTemplates.has(filename)) return;
+
+            recentTemplates.set(filename, content);
+            const badge = document.createElement("span");
+            badge.className = "badge rounded-pill border border-danger text-danger d-flex align-items-center";
+            badge.style.cursor = "pointer";
+            badge.title = "Click to reload";
+
+            const label = document.createElement("span");
+            label.textContent = displayName;
+            label.className = "me-2";
+
+            const closeBtn = document.createElement("button");
+            closeBtn.className = "btn-close btn-sm";
+            closeBtn.style.filter = "invert(24%) sepia(98%) saturate(6146%) hue-rotate(357deg) brightness(94%) contrast(104%)";
+            closeBtn.type = "button";
+            closeBtn.setAttribute("aria-label", "Remove");
+
+            badge.appendChild(label);
+            badge.appendChild(closeBtn);
+            recentTemplatesContainer.appendChild(badge);
+
+            label.addEventListener("click", () => {
+                const csvContent = recentTemplates.get(filename);
+                if (csvContent) {
+                    parsedOutput.innerHTML = "";
+                    clearMessage();
+                    updateCurrentFileName(displayName);
+                    fieldSchema = parseFieldSchemaFromCSV(csvContent);
+                }
+            });
+
+            closeBtn.addEventListener("click", () => {
+                recentTemplates.delete(filename);
+                recentTemplatesContainer.removeChild(badge);
+            });
+        }
+
+        function parseFieldSchemaFromCSV(text) {
+            const rows = text.trim().split("\n").map(r => r.split(","));
+            headers = rows[0].map(h => h.trim());
+
+            const nameIdx = headers.indexOf("Field Name");
+            const startIdx = headers.indexOf("Start Position");
+            const endIdx = headers.indexOf("End Position");
+            const lengthIdx = headers.indexOf("Field Length");
+            console.log(nameIdx, startIdx, lengthIdx);
+
+            if (nameIdx === -1 || startIdx === -1 || endIdx === -1 | lengthIdx === -1) return [];
+
+            return rows.slice(1).map(r => ({
+                name: r[nameIdx].trim(),
+                start: parseInt(r[startIdx].trim()),
+                end: parseInt(r[endIdx].trim()),
+                length: parseInt(r[lengthIdx].trim())
+            }));
+        }
+
+        function parseMessage() {
+            const input = document.getElementById("inputMessage").value;
+            parsedOutput.innerHTML = "";
+            if (!input || input.length === 0) {
+                parsedOutput.innerHTML = "<div class='text-danger'>Please enter a message.</div>";
+                return;
+            }
+            if (!fieldSchema.length) {
+                parsedOutput.innerHTML = "<div class='text-danger'>No template schema loaded.</div>";
+                return;
+            }
+
+            const rows = fieldSchema.map(field => {
+                const value = input.slice(field.start - 1, (field.start - 1) + field.length).trim();
+                return `<tr><td>${field.name}</td><td>${field.start}</td><td>${field.end}</td><td>${field.length}</td><td>${value}</td></tr>`;
+            });
+
+            parsedOutput.innerHTML = `
+            <div class="table-responsive mb-5">
+            <table class="table table-bordered table-striped" id="csvTable">
+                <thead>
+                    <tr>
+                        <th>${headers[0]}</th>
+                        <th>${headers[1]}</th>
+                        <th>${headers[2]}</th>
+                        <th>${headers[3]}</th>
+                        <th>${headers[4]}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows.join("")}
+                <tbody>
+            </table>`;
+        }
+
+        function clearMessage() {
+            document.getElementById("inputMessage").value = "";
+            parsedOutput.innerHTML = "";
+        }
+    </script>
+</body>
+
+</html>
