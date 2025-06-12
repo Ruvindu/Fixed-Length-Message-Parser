@@ -12,12 +12,10 @@
         .btn {
             width: 160px;
         }
-
     </style>
 </head>
 
 <body>
-
     <div class="container mt-3">
         <h2 class="text-center mb-4">Fixed-Length Message Parser</h2>
 
@@ -45,10 +43,19 @@
             <textarea class="form-control" id="inputMessage" placeholder="Paste your fixed-length message here..."
                 rows="7"></textarea>
         </div>
-        <div>
-            <button class="btn btn-danger mb-4 mr-2" onclick="parseMessage()">Parse Message</button>
-            <button class="btn btn-secondary mb-4" onclick="clearMessage()">Clear</button>
+
+        <div class="d-flex flex-wrap justify-content-between mb-4">
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary" onclick="parseMessage()">Parse Message</button>
+                <button class="btn btn-secondary" onclick="clearMessage()">Clear</button>
+            </div>
+            <div>
+                <button class="btn btn-success" onclick="exportTableToExcel()">Export as Excel</button>
+            </div>
         </div>
+
+        <div id="alertContainer" class="mt-2"></div>
+
 
         <div id="parsedOutput"></div>
 
@@ -64,6 +71,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 
     <!-- JavaScript -->
     <script>
@@ -109,7 +118,7 @@
 
             recentTemplates.set(filename, content);
             const badge = document.createElement("span");
-            badge.className = "badge rounded-pill border border-danger text-danger d-flex align-items-center";
+            badge.className = "badge rounded-pill border border-primary text-primary d-flex align-items-center";
             badge.style.cursor = "pointer";
             badge.title = "Click to reload";
 
@@ -119,7 +128,7 @@
 
             const closeBtn = document.createElement("button");
             closeBtn.className = "btn-close btn-sm";
-            closeBtn.style.filter = "invert(24%) sepia(98%) saturate(6146%) hue-rotate(357deg) brightness(94%) contrast(104%)";
+            closeBtn.style.filter = "invert(29%) sepia(98%) saturate(7471%) hue-rotate(205deg) brightness(101%) contrast(101%)";
             closeBtn.type = "button";
             closeBtn.setAttribute("aria-label", "Remove");
 
@@ -167,11 +176,11 @@
             const input = document.getElementById("inputMessage").value;
             parsedOutput.innerHTML = "";
             if (!input || input.length === 0) {
-                parsedOutput.innerHTML = "<div class='text-danger'>Please enter a message.</div>";
+                parsedOutput.innerHTML = "<div class='text-primary'>Please enter a message.</div>";
                 return;
             }
             if (!fieldSchema.length) {
-                parsedOutput.innerHTML = "<div class='text-danger'>No template schema loaded.</div>";
+                parsedOutput.innerHTML = "<div class='text-primary'>No template schema loaded.</div>";
                 return;
             }
 
@@ -202,6 +211,34 @@
             document.getElementById("inputMessage").value = "";
             parsedOutput.innerHTML = "";
         }
+
+        function exportTableToExcel() {
+            alertContainer.innerHTML = "";
+            const table = document.querySelector("#parsedOutput table");
+            if (!table) {
+                showAlert("No table to export.", "warning");
+                return;
+            }
+
+
+            const worksheet = XLSX.utils.table_to_sheet(table);
+            const workbook = XLSX.utils.book_new();
+            const fileName = currentFileNameSpan.textContent + "_" + "parsed_message.xlsx";
+            XLSX.utils.book_append_sheet(workbook, worksheet, currentFileNameSpan.textContent + " Parsed Message");
+
+            XLSX.writeFile(workbook, fileName);
+        }
+
+        function showAlert(message, type = "info") {
+            const alertContainer = document.getElementById("alertContainer");
+            alertContainer.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`;
+        }
+
+
     </script>
 </body>
 
