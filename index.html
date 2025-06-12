@@ -39,7 +39,17 @@
 
         <!-- Fixed-length message parser -->
         <div class="mb-3">
-            <label for="inputMessage" class="form-label">Enter Fixed-Length Message:</label>
+            <div class="d-flex flex-wrap justify-content-between ">
+                <label for="inputMessage" class="form-label d-flex gap-2">Enter Fixed-Length Message:</label>
+
+                <small class="text-muted">
+                    Length: <span id="textLength">0</span> |
+                    Position: <span id="cursorPosition">0</span> |
+                    Selection: <span id="selectionRange">0 to 0</span>
+                </small>
+            </div>
+
+
             <textarea class="form-control" id="inputMessage" placeholder="Paste your fixed-length message here..."
                 rows="7"></textarea>
         </div>
@@ -82,10 +92,30 @@
         const tableBody = document.querySelector("#csvTable tbody");
         const currentFileNameSpan = document.getElementById("currentFileName");
         const parsedOutput = document.getElementById("parsedOutput");
+        const inputMessage = document.getElementById("inputMessage");
+        const textLengthDisplay = document.getElementById("textLength");
+        const cursorPositionDisplay = document.getElementById("cursorPosition");
+        const selectionRangeDisplay = document.getElementById("selectionRange");
 
         const recentTemplates = new Map();
         var headers = [];
         var fieldSchema = [];
+
+        function updateTextInfo() {
+            const length = inputMessage.value.length;
+            const start = inputMessage.selectionStart;
+            const end = inputMessage.selectionEnd;
+
+            textLengthDisplay.textContent = length;
+            cursorPositionDisplay.textContent = start;
+            selectionRangeDisplay.textContent = `${start} to ${end}`;
+        }
+
+        inputMessage.addEventListener("input", updateTextInfo);
+        inputMessage.addEventListener("click", updateTextInfo);
+        inputMessage.addEventListener("keyup", updateTextInfo);
+        inputMessage.addEventListener("select", updateTextInfo);
+
 
         fileInput.addEventListener("change", function (e) {
             const file = e.target.files[0];
