@@ -175,12 +175,13 @@
         function parseMessage() {
             const input = document.getElementById("inputMessage").value;
             parsedOutput.innerHTML = "";
+            alertContainer.innerHTML = "";
             if (!input || input.length === 0) {
-                parsedOutput.innerHTML = "<div class='text-danger'>Please enter a message.</div>";
+                showAlert("Please enter a message.", "danger");
                 return;
             }
             if (!fieldSchema.length) {
-                parsedOutput.innerHTML = "<div class='text-danger'>No template schema loaded.</div>";
+                showAlert("No template schema loaded.", "danger");
                 return;
             }
 
@@ -209,6 +210,7 @@
 
         function clearMessage() {
             document.getElementById("inputMessage").value = "";
+            alertContainer.innerHTML = "";
             parsedOutput.innerHTML = "";
         }
 
