@@ -176,11 +176,11 @@
             const input = document.getElementById("inputMessage").value;
             parsedOutput.innerHTML = "";
             if (!input || input.length === 0) {
-                parsedOutput.innerHTML = "<div class='text-primary'>Please enter a message.</div>";
+                parsedOutput.innerHTML = "<div class='text-danger'>Please enter a message.</div>";
                 return;
             }
             if (!fieldSchema.length) {
-                parsedOutput.innerHTML = "<div class='text-primary'>No template schema loaded.</div>";
+                parsedOutput.innerHTML = "<div class='text-danger'>No template schema loaded.</div>";
                 return;
             }
 
